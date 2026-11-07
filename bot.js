@@ -55,6 +55,12 @@ const FLAG_TWITCH_DISALLOWED = 1 << 24;
 // https://7tv.app/emotes/<id>  oder  https://cdn.7tv.app/emote/<id>/...
 const LINK_RE = /(?:7tv\.app\/emotes\/|cdn\.7tv\.app\/emote\/)([0-9A-Za-z]{20,26})/i;
 
+// Account wechseln: RESET_LOGIN=true setzen, deployen, Variable danach wieder LÖSCHEN
+if (bool(env.RESET_LOGIN, false)) {
+  for (const f of [TOKEN_FILE, STATE_FILE]) fs.rmSync(f, { force: true });
+  console.log('RESET_LOGIN aktiv: Login und Emote-Liste gelöscht. Variable jetzt entfernen!');
+}
+
 let tokens = readJson(TOKEN_FILE, null);
 // Optional: Start mit vorhandenem Refresh-Token statt Login im Log
 if (!tokens && env.TWITCH_REFRESH_TOKEN) tokens = { access_token: '', refresh_token: env.TWITCH_REFRESH_TOKEN };
